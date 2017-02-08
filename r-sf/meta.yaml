@@ -1,0 +1,105 @@
+{% set posix = 'm2-' if win else '' %}
+{% set native = 'm2w64-' if win else '' %}
+
+package:
+  name: r-sf
+  # Note that conda versions cannot contain -, so any -'s in the version have
+  # been replaced with _'s.
+  version: "0.3_4"
+
+source:
+  fn: sf_0.3-4.tar.gz
+  url:
+    - http://cran.r-project.org/src/contrib/sf_0.3-4.tar.gz
+    - http://cran.r-project.org/src/contrib/Archive/sf/sf_0.3-4.tar.gz
+
+
+  # You can add a hash for the file here, like md5 or sha1
+  # md5: 49448ba4863157652311cc5ea4fea3ea
+  # sha1: 3bcfbee008276084cbb37a2b453963c61176a322
+  # patches:
+   # List any patch files here
+   # - fix.patch
+
+build:
+  # If this is a new build for the same version, increment the build
+  # number. If you do not include this key, it defaults to 0.
+  number: 1
+
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+# Suggests: sp (>= 1.2-4), rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr, geosphere (>= 1.5-5), maptools, maps, microbenchmark
+requirements:
+  build:
+    - r-base
+    - r-dbi
+    - r-rcpp
+    - r-units >=0.4
+    - posix               # [win]
+    - {{native}}toolchain # [win]
+    - gcc                 # [not win]
+    - geos
+    - gdal
+    - jpeg 8d
+    - proj4
+
+  run:
+    - r-base
+    - r-dbi
+    - r-rcpp
+    - r-units >=0.4
+    - geos
+    - gdal
+    - jpeg 8d
+    - proj4
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('sf')" # [not win]
+    - "\"%R%\" -e \"library('sf')\"" # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://github.com/edzer/sfr/
+  license: GPL-2 | MIT + file LICENSE
+  summary: Support for simple features, a standardized way to encode spatial data, with bindings  to
+    GDAL, GEOS and Proj.4.
+  license_family: GPL2
+
+# The original CRAN metadata for this package was:
+
+# Package: sf
+# Version: 0.3-4
+# Title: Simple Features for R
+# Description: Support for simple features, a standardized way to encode spatial data, with bindings  to GDAL, GEOS and Proj.4.
+# Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de"), person("Roger", "Bivand", role = "ctb"), person("Ian", "Cook", role = "ctb"), person("Tim", "Keitt", role = "ctb"), person("Michael", "Sumner", role = "ctb"), person("Robin", "Lovelace", role = "ctb"), person("Hadley", "Wickham", role = "ctb"), person("Jeroen", "Ooms", role = "ctb"), person("Etienne", "Racine", role = "ctb") )
+# Depends: R (>= 3.3.0)
+# Imports: utils, stats, tools, graphics, grDevices, grid, methods, Rcpp, DBI, units (>= 0.4)
+# Suggests: sp (>= 1.2-4), rgeos, rgdal, RPostgreSQL, testthat, knitr, tibble, dplyr, tidyr, geosphere (>= 1.5-5), maptools, maps, microbenchmark
+# LinkingTo: Rcpp
+# VignetteBuilder: knitr
+# SystemRequirements: GDAL (>= 2.0.0), GEOS (>= 3.3.0), PROJ.4 (>= 4.8.0)
+# License: GPL-2 | MIT + file LICENSE
+# URL: https://github.com/edzer/sfr/
+# BugReports: https://github.com/edzer/sfr/issues/
+# Collate: RcppExports.R init.R bbox.R read.R db.R sfc.R sfg.R sf.R wkb.R wkt.R plot.R geom.R transform.R sp.R crs.R grid.R arith.R tidy.R cast_sfg.R cast_sfc.R graticule.R datasets.R aggregate.R agr.R maps.R join.R
+# RoxygenNote: 6.0.0
+# NeedsCompilation: yes
+# Packaged: 2017-02-06 20:15:26 UTC; edzer
+# Author: Edzer Pebesma [aut, cre], Roger Bivand [ctb], Ian Cook [ctb], Tim Keitt [ctb], Michael Sumner [ctb], Robin Lovelace [ctb], Hadley Wickham [ctb], Jeroen Ooms [ctb], Etienne Racine [ctb]
+# Maintainer: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
+# Repository: CRAN
+# Date/Publication: 2017-02-06 21:59:09
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
